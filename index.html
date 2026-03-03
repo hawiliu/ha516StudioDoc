@@ -5,48 +5,81 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ha516Studio</title>
+    <!-- Dynamic base: works on GitHub Pages (/ha516StudioDoc/) and local dev servers (/) -->
+    <script>
+        (function () {
+            var base = document.createElement('base');
+            base.href = location.pathname.startsWith('/ha516StudioDoc')
+                ? '/ha516StudioDoc/'
+                : '/';
+            document.head.appendChild(base);
+        })();
+    </script>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* ── Language Picker ───────────────────────────── */
+        #lang-picker-wrap {
+            position: fixed;
+            top: 1rem;
+            right: 1.25rem;
+            z-index: 100;
+            display: flex;
+            gap: 0.35rem;
+        }
+
+        .lang-btn {
+            padding: 0.3rem 0.65rem;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            border: 1.5px solid rgba(255, 255, 255, 0.25);
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, border-color 0.2s;
+        }
+
+        .lang-btn:hover {
+            background: rgba(255, 255, 255, 0.18);
+            color: #fff;
+        }
+
+        .lang-btn.active {
+            background: rgba(255, 255, 255, 0.28);
+            border-color: rgba(255, 255, 255, 0.6);
+            color: #fff;
+        }
+
+        /* ── Page transition ───────────────────────────── */
+        #content {
+            opacity: 1;
+            transition: opacity 0.2s ease;
+            min-height: 60vh;
+        }
+    </style>
 </head>
 
 <body class="landing-page">
-    <div class="container center-text">
-        <h1>ha516Studio</h1>
-        <p class="subtitle">
-            Creating immersive and engaging digital experiences.
-        </p>
 
-        <div class="app-description">
-            <h2>About Us</h2>
-            <p>
-                ha516Studio is dedicated to building high-quality games and applications that challenge and entertain.
-                Our focus is on clean design, smooth gameplay, and user privacy.
-            </p>
-        </div>
-
-        <div class="app-description" style="margin-bottom: 3rem;">
-            <h2>Contact Us</h2>
-            <p>
-                Have questions or feedback? We'd love to hear from you.
-            </p>
-            <p>
-                Email: <a href="mailto:ha516Studio@gmail.com">ha516Studio@gmail.com</a>
-            </p>
-        </div>
-
-        <h2>Games</h2>
-        <div class="grid" style="margin-top: 1.5rem;">
-            <a href="RoundEvolution/index.html" class="card game-card">
-                <img src="RoundEvolution/icon.png" alt="Round Evolution"
-                    style="width: 80px; height: 80px; border-radius: 18px; margin-bottom: 0.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
-                <h2>Round Evolution</h2>
-                <span>Support & Legal Docs</span>
-            </a>
-        </div>
-
-        <footer>
-            &copy; 2026 ha516Studio. All rights reserved.
-        </footer>
+    <!-- Language picker (populated by lang.js) -->
+    <div id="lang-picker-wrap">
+        <div id="lang-picker"></div>
     </div>
+
+    <!-- Page content injected here by router.js -->
+    <main id="content"></main>
+
+    <!-- Scripts (order matters: lang before router) -->
+    <script src="lang.js"></script>
+    <script src="router.js"></script>
+    <script>
+        (async () => {
+            await i18n.init();   // load translations, render picker, apply i18n
+            router.init();       // start routing (will fetch first fragment)
+        })();
+    </script>
+
 </body>
 
 </html>
